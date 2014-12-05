@@ -39,22 +39,25 @@ namespace NestWebJob
                 DeviceID = "Nest"
             };
 
-            //check if it is night time and if the temp is below 15.5 degreees C
+            //check if it is night time and if the temp is below 15.0 degreees C
             //If it is then kick heating on using the NEST API
             if ((DateTime.UtcNow.Hour >= 22 || DateTime.UtcNow.Hour <= 7) )
             {
                 double targetTemp = 0.0;
-                if (currentReadingInMaplesRoom.Temperature < 15.5)
+                if (currentReadingInMaplesRoom.Temperature < 15.0)
                 {
                     //turn on nest by setting the target temp to be 1.0 degree higher than the ambient temp
-                    targetTemp = nestThermostat.ambient_temperature_c + 1.0;
-                    UpdateTargetTemperature(targetTemp);
-                    nestTempReading.AdditionalInformation = "Nest thermostat target temperature increased to " + targetTemp;
+                    if (nestThermostat.target_temperature_c <= 18.0)
+                    {
+                        targetTemp = nestThermostat.ambient_temperature_c + 1.0;
+                        UpdateTargetTemperature(targetTemp);
+                        nestTempReading.AdditionalInformation = "Nest thermostat target temperature increased to " + targetTemp;
+                    }
                 }
-                else if (currentReadingInMaplesRoom.Temperature > 18.0)
+                else if (currentReadingInMaplesRoom.Temperature > 16.5)
                 {   
-                    //turn Nest off if temp in Maples room is higher than 18 degrees by setting Nest target temp to be the same as the ambient temp
-                    targetTemp = nestThermostat.ambient_temperature_c;
+                    //turn Nest off if temp in Maples room is higher than 16.5 degrees by setting Nest target temp to be 15.0 degress
+                    targetTemp = 15.0;
                     UpdateTargetTemperature(targetTemp);
                     nestTempReading.AdditionalInformation = "Nest thermostat target temperature set to " + targetTemp; 
                 }

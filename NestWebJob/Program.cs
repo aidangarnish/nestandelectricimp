@@ -44,20 +44,16 @@ namespace NestWebJob
             if ((DateTime.UtcNow.Hour >= 22 || DateTime.UtcNow.Hour <= 7) )
             {
                 double targetTemp = 0.0;
-                if (currentReadingInMaplesRoom.Temperature < 15.0)
+                if (currentReadingInMaplesRoom.Temperature < 14.5)
                 {
-                    //turn on nest by setting the target temp to be 1.0 degree higher than the ambient temp
-                    if (nestThermostat.target_temperature_c <= 18.0)
-                    {
-                        targetTemp = nestThermostat.ambient_temperature_c + 1.0;
-                        UpdateTargetTemperature(targetTemp);
-                        nestTempReading.AdditionalInformation = "Nest thermostat target temperature increased to " + targetTemp;
-                    }
+                    targetTemp = nestThermostat.ambient_temperature_c + 1.0;
+                    UpdateTargetTemperature(targetTemp);
+                    nestTempReading.AdditionalInformation = "Nest thermostat target temperature increased to " + targetTemp;   
                 }
-                else if (currentReadingInMaplesRoom.Temperature > 16.5)
+                else if (currentReadingInMaplesRoom.Temperature > 15.5)
                 {   
-                    //turn Nest off if temp in Maples room is higher than 16.5 degrees by setting Nest target temp to be 15.0 degress
-                    targetTemp = 15.0;
+                    //turn Nest off if temp in Maples room is acceptable
+                    targetTemp = 14.0;
                     UpdateTargetTemperature(targetTemp);
                     nestTempReading.AdditionalInformation = "Nest thermostat target temperature set to " + targetTemp; 
                 }

@@ -39,7 +39,7 @@ namespace NestWebJob
                 DeviceID = "Nest"
             };
 
-            //check if it is night time and if the temp is below 15.0 degreees C
+            //check if it is night time and if the temp is below 14.5 degreees C
             //If it is then kick heating on using the NEST API
             if ((DateTime.UtcNow.Hour >= 22 || DateTime.UtcNow.Hour <= 7) )
             {

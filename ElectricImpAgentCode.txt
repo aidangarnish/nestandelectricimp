@@ -1,0 +1,37 @@
+// Basic wrapper to create an execute an HTTP POST
+
+function HttpPostWrapper (url, headers, string) {
+
+  local request = http.post(url, headers, string);
+
+  local response = request.sendsync();
+
+  return response;
+
+}
+
+/* REGISTER DEVICE CALLBACKS  ------------------------------------------------*/
+
+device.on("data", function(datapoint) {
+    
+    server.log("Temp: " + datapoint.temp);
+    server.log("ID: " + datapoint.id);
+    
+    local posturl = "https://[your api url]/api/temperature"
+    local headers = {
+                        "Content-Type": "application/json"
+                    };
+    
+    local data = { "DeviceID": datapoint.id, "Temperature": datapoint.temp };
+    local body = http.jsonencode(data);
+    
+    response <- HttpPostWrapper(posturl, headers, body);
+});
+
+/* REGISTER HTTP HANDLER -----------------------------------------------------*/
+
+// This agent does not need an HTTP handler
+
+/* RUNTIME BEGINS HERE -------------------------------------------------------*/
+
+server.log("TempBug Agent Running");

@@ -1,0 +1,92 @@
+﻿@model ElectricImpTemperatureAPI.ViewModels.HomeViewModel
+
+<div class="jumbotron">
+    <h1>@DateTime.UtcNow.ToString("dd MMM yyyy")</h1>
+   
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h2>Latest Readings</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Room</th>
+                    <th>Temperature</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Maple's</td>
+                    <td>@Model.MapleTemperatureReading.Temperature&#176C</td>
+                    <td>@Model.MapleTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                </tr>
+                <tr>
+                    <td>Snug</td>
+                    <td>@Model.NestTemperatureReading.Temperature&#176C</td>
+                    <td>@Model.NestTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h2>Last 3 Hours</h2>
+        <i id="last3hoursspinner" class="fa fa-refresh fa-spin fa-3x"></i>
+        <canvas id="3HourChart" width="400" height="100"></canvas>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h2>Today</h2>
+        <i id="todayspinner" class="fa fa-refresh fa-spin fa-3x"></i>
+        <canvas id="todayChart" width="400" height="100"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+  <script>
+      Chart.defaults.global.responsive = true;
+      var options = {
+          bezierCurve: true,
+          legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+      };
+
+      $.ajax({
+          type: "GET",
+          cache: false,
+          url: "/chart/last3hours",
+          success: function (data) {
+              // Get the context of the canvas element we want to select
+              var ctx = document.getElementById("3HourChart").getContext("2d");
+              var myLineChart = new Chart(ctx).Line(data, options);
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+              console.log(textStatus, errorThrown);
+          },
+          complete: function () {
+              $('#last3hoursspinner').hide();
+          }  
+      });
+
+      $.ajax({
+          type: "GET",
+          cache: false,
+          url: "/chart/today",
+          success: function (data) {
+              // Get the context of the canvas element we want to select
+              var ctx = document.getElementById("todayChart").getContext("2d");
+              var myLineChart = new Chart(ctx).Line(data, options);
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+              console.log(textStatus, errorThrown);
+          },
+          complete: function () {
+              $('#todayspinner').hide();
+          }
+      });
+
+</script>
+}
+

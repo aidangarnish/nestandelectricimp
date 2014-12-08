@@ -43,6 +43,65 @@ namespace ElectricImpTemperatureAPI.Controllers
             return Json(chart, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult Rickshaw()
+        {
+            IEnumerable<TemperatureReading> maplesReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), MapleRoomDeviceID);
+            IEnumerable<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), NestDeviceID);
+
+
+            RickshawDataSeries dataSeries = new RickshawDataSeries
+            {
+                series = new List<Series>()
+            };
+
+            Series snugSeries = new Series
+            {
+                data = new List<Datum>(),
+                color= "steelblue",
+			    name= "Snug"
+                 
+            };
+
+            foreach(TemperatureReading tempReading in nestReadings.OrderBy(t => t.Timestamp))
+            {
+                long unixTime = ToUnixTime(tempReading.Timestamp.DateTime);
+                Datum datum = new Datum
+                {
+                    x = unixTime,
+                    y = tempReading.Temperature
+                };
+
+                snugSeries.data.Add(datum);
+            }
+
+            Series mapleSeries = new Series
+            {
+                data = new List<Datum>(),
+                color = "lightblue",
+                name = "Maple"
+
+            };
+
+            foreach(TemperatureReading tempReading in maplesReadings.OrderBy(t => t.Timestamp))
+            {
+                long unixTime =  ToUnixTime(tempReading.Timestamp.DateTime);
+                Datum datum = new Datum
+                {
+                    x = unixTime,
+                    y = tempReading.Temperature
+                };
+
+                mapleSeries.data.Add(datum);
+
+            }
+
+            dataSeries.series.Add(snugSeries);
+            dataSeries.series.Add(mapleSeries);
+
+      
+            return Json(dataSeries, JsonRequestBehavior.AllowGet);
+        }
+
         private Chart GetChart(int duration, int interval)
         {
             List<DateTime> labelDateTimes = new List<DateTime>();
@@ -137,6 +196,21 @@ namespace ElectricImpTemperatureAPI.Controllers
             }
 
             return labels;
+        }
+
+        private DateTime FromUnixTime(long unixTime)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return epoch.AddSeconds(unixTime);
+        }
+
+        private long ToUnixTime(DateTime dateTime)
+        {
+            DateTime dt = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            return Convert.ToInt64((dt - epoch).TotalSeconds);
         }
 
     }

@@ -23,6 +23,13 @@ namespace ElectricImpTemperatureAPI
             bundles.Add(new ScriptBundle("~/bundles/chartjs").Include(
                       "~/Scripts/chart.js"));
 
+            bundles.Add(new StyleBundle("~/Content/rickshawcss").Include(
+                      "~/Content/rickshaw.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/rickshaw").Include(
+                      "~/Scripts/d3.v3.js",
+                      "~/Scripts/rickshaw.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));

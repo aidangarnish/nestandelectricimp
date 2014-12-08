@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Data";
+}
+
+
+<h2>Data</h2>
+
+<div id="legend"></div>
+<div id="y-axis"></div>
+<div id="chart"></div>
+
+
+@section Scripts {
+
+        @Scripts.Render("~/bundles/rickshaw")
+
+        <script>
+            $.ajax({
+                type: "GET",
+                cache: false,
+                url: "/chart/rickshaw",
+                success: function (dataseries) {
+
+                    var graph = new Rickshaw.Graph({
+
+                        width: 500,
+                        element: document.getElementById("chart"),
+                        renderer: 'lineplot',
+                        padding: { top: 0.1 },
+                        series: dataseries.series
+                                        
+                    });
+
+                    var hover = new Rickshaw.Graph.HoverDetail({ graph: graph });
+
+                    var y_ticks = new Rickshaw.Graph.Axis.Y({
+                        graph: graph,
+                        orientation: 'left',
+                        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+                        element: document.getElementById('y_axis')
+                    });
+
+                    var legend = new Rickshaw.Graph.Legend({
+                        graph: graph,
+                        element: document.querySelector('#legend')
+                    });
+
+                    var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+                        graph: graph,
+                        legend: legend
+                    });
+
+                    var xAxis = new Rickshaw.Graph.Axis.Time({
+                        graph: graph
+                    });
+
+                    xAxis.render();
+
+
+                    graph.render();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                },
+                complete: function () {
+                    //$('#last3hoursspinner').hide();
+                }
+            });
+
+           
+
+        
+
+        </script>
+    }
+
+

@@ -30,5 +30,11 @@ namespace ElectricImpTemperatureAPI.Controllers
             };
             return View(model);
         }
+
+        public ActionResult Data() 
+        {
+            return View();
+        }
+
     }
 }

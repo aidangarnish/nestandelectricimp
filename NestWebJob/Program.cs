@@ -16,6 +16,8 @@ namespace NestWebJob
         private string NestThermostatUrl = ConfigurationManager.AppSettings["NestThermostatUrl"];
         private string NestThermostatID = ConfigurationManager.AppSettings["NestThermostatID"];
         private string NestAuthToken = ConfigurationManager.AppSettings["NestAuthToken"];
+        private double TargetTemp = Convert.ToDouble(ConfigurationManager.AppSettings["TargetTemp"]);
+
         static void Main(string[] args)
         {
             Program program = new Program();
@@ -39,23 +41,25 @@ namespace NestWebJob
                 DeviceID = "Nest"
             };
 
-            //check if it is night time and if the temp is below 14.5 degreees C
-            //If it is then kick heating on using the NEST API
+            //check if it is night time and if the temp is below target
+            //If it is then kick heating on using the NEST API#
+
             if ((DateTime.UtcNow.Hour >= 22 || DateTime.UtcNow.Hour <= 7) )
             {
-                double targetTemp = 0.0;
-                if (currentReadingInMaplesRoom.Temperature < 14.5)
+                double nestTargetTemp = 0.0;
+
+                if (currentReadingInMaplesRoom.Temperature <  TargetTemp - 0.5)
                 {
-                    targetTemp = nestThermostat.ambient_temperature_c + 1.0;
-                    UpdateTargetTemperature(targetTemp);
-                    nestTempReading.AdditionalInformation = "Nest thermostat target temperature increased to " + targetTemp;   
+                    nestTargetTemp = nestThermostat.ambient_temperature_c + 1.0;
+                    UpdateTargetTemperature(nestTargetTemp);
+                    nestTempReading.AdditionalInformation = "Nest thermostat target temperature increased to " + nestTargetTemp;   
                 }
-                else if (currentReadingInMaplesRoom.Temperature > 15.5)
+                else if (currentReadingInMaplesRoom.Temperature > TargetTemp + 0.5)
                 {   
-                    //turn Nest off if temp in Maples room is acceptable
-                    targetTemp = 14.0;
-                    UpdateTargetTemperature(targetTemp);
-                    nestTempReading.AdditionalInformation = "Nest thermostat target temperature set to " + targetTemp; 
+                    //turn Nest off if temp in Maples room is at acceptable temp
+                    nestTargetTemp = nestThermostat.ambient_temperature_c - 3.0;
+                    UpdateTargetTemperature(nestTargetTemp);
+                    nestTempReading.AdditionalInformation = "Nest thermostat target temperature set to " + nestTargetTemp; 
                 }
             }
 

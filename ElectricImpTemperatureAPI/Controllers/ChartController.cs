@@ -15,13 +15,15 @@ namespace ElectricImpTemperatureAPI.Controllers
         private TemperatureReadingService temperatureReadingService;
         private string MapleRoomDeviceID;
         private string NestDeviceID;
+       
+
 
         public ChartController()
         {
             temperatureReadingService = new TemperatureReadingService();
             MapleRoomDeviceID = ConfigurationManager.AppSettings["MaplesRoomDeviceID"];
             NestDeviceID = ConfigurationManager.AppSettings["NestDeviceID"];
-
+           
 
         }
         // GET: Chart

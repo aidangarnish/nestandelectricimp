@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AD0EB9
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NestWebJob", "NestWebJob\NestWebJob.csproj", "{CD19F9E0-70CB-4706-9CC6-4AF3D79BBF7F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C0C4D207-4CAF-4861-ADD1-3F606E94ACF6}"
 	ProjectSection(SolutionItems) = preProject
 		ElectricImpAgentCode.txt = ElectricImpAgentCode.txt
@@ -27,10 +25,6 @@ Global
 		{F0BBD7FB-B3A8-4EC7-B5C4-E71E499B5D1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0BBD7FB-B3A8-4EC7-B5C4-E71E499B5D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0BBD7FB-B3A8-4EC7-B5C4-E71E499B5D1D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD19F9E0-70CB-4706-9CC6-4AF3D79BBF7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD19F9E0-70CB-4706-9CC6-4AF3D79BBF7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD19F9E0-70CB-4706-9CC6-4AF3D79BBF7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD19F9E0-70CB-4706-9CC6-4AF3D79BBF7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

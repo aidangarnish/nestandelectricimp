@@ -203,6 +203,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Chart.cs" />
+    <Compile Include="Models\NestThermostat.cs" />
     <Compile Include="Models\RickshawDataSeries.cs" />
     <Compile Include="Models\TemperatureReading.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

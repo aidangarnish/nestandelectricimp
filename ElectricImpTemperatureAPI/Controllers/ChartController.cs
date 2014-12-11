@@ -47,8 +47,8 @@ namespace ElectricImpTemperatureAPI.Controllers
 
         public JsonResult Rickshaw()
         {
-            IEnumerable<TemperatureReading> maplesReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), MapleRoomDeviceID);
-            IEnumerable<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), NestDeviceID);
+            List<TemperatureReading> maplesReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), MapleRoomDeviceID).ToList();
+            List<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), NestDeviceID).ToList();
 
 
             RickshawDataSeries dataSeries = new RickshawDataSeries
@@ -122,7 +122,7 @@ namespace ElectricImpTemperatureAPI.Controllers
                 pointHighlightStroke = "rgba(151,187,205,1)"
             };
 
-            IEnumerable<TemperatureReading> maplesReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), MapleRoomDeviceID).Where(r => r.Timestamp >= firstLabelDateTime);
+            List<TemperatureReading> maplesReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), MapleRoomDeviceID).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
 
             maplesRoomDataset.data = BuildDataSet(labelDateTimes, maplesReadings);
 
@@ -139,7 +139,7 @@ namespace ElectricImpTemperatureAPI.Controllers
 
             
 
-            IEnumerable<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), NestDeviceID).Where(r => r.Timestamp >= firstLabelDateTime);
+            List<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), NestDeviceID).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
 
             nestDataset.data = BuildDataSet(labelDateTimes, nestReadings);
 

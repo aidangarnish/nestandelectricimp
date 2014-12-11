@@ -69,7 +69,7 @@ namespace ElectricImpTemperatureAPI.Controllers
             //check if it is night time and if the temp is below target
             //If it is then kick heating on using the NEST API#
 
-            if ((DateTime.UtcNow.Hour >= 22 || DateTime.UtcNow.Hour <= 7))
+            if ((DateTime.UtcNow.Hour >= 22 || DateTime.UtcNow.Hour <= 6))
             {
                 double nestTargetTemp = 0.0;
 

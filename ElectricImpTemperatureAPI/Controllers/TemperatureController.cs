@@ -32,17 +32,17 @@ namespace ElectricImpTemperatureAPI.Controllers
             TargetTemp = Convert.ToDouble(ConfigurationManager.AppSettings["TargetTemp"]);
             NestDeviceID = ConfigurationManager.AppSettings["NestDeviceID"];
         }
-        public HttpResponseMessage Post([FromBody]TemperatureReading model)
+        public HttpResponseMessage Post([FromBody]TemperatureReading temperatureReading)
         {
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, "value");
 
             try
             {
-                model.Save();
+                temperatureReading.Save();
 
-                TemperatureReading nestTempReading = CheckNest();
+                TemperatureReading nestTempReading = CheckNest(temperatureReading);
 
-                SaveDataToKeenIO(nestTempReading, model);
+                SaveDataToKeenIO(nestTempReading, temperatureReading);
             }
             catch
             {
@@ -52,13 +52,9 @@ namespace ElectricImpTemperatureAPI.Controllers
             return response;
         }
 
-        private TemperatureReading CheckNest()
+        private TemperatureReading CheckNest(TemperatureReading bedroomReading)
         {
             TemperatureReadingService tempReadingService = new TemperatureReadingService();
-
-            IEnumerable<TemperatureReading> tempReadings = tempReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.Today.ToString("dd-MM-yyyy"), "2338b2ab5ba5ceee");
-
-            TemperatureReading currentReadingInMaplesRoom = tempReadings.OrderByDescending(t => t.Timestamp).FirstOrDefault();
 
             NestThermostat nestThermostat = GetCurrentNestValues();
 
@@ -70,19 +66,19 @@ namespace ElectricImpTemperatureAPI.Controllers
             };
 
             //check if it is night time and if the temp is below target
-            //If it is then kick heating on using the NEST API#
+            //If it is then kick heating on using the NEST API
 
             if ((DateTime.UtcNow.Hour >= 22 || DateTime.UtcNow.Hour <= 6))
             {
                 double nestTargetTemp = 0.0;
 
-                if (currentReadingInMaplesRoom.Temperature < TargetTemp - 0.2)
+                if (bedroomReading.Temperature < TargetTemp - 0.2)
                 {
                     nestTargetTemp = nestThermostat.ambient_temperature_c + 1.0;
                     UpdateTargetTemperature(nestTargetTemp);
                     nestTempReading.AdditionalInformation = "Nest thermostat target temperature increased to " + nestTargetTemp;
                 }
-                else if (currentReadingInMaplesRoom.Temperature > TargetTemp + 0.2)
+                else if (bedroomReading.Temperature > TargetTemp + 0.2)
                 {
                     //turn Nest off if temp in Maples room is at acceptable temp
                     nestTargetTemp = nestThermostat.ambient_temperature_c - 0.5;

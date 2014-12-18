@@ -1,5 +1,6 @@
 ﻿using ElectricImpTemperatureAPI.Models;
 using ElectricImpTemperatureAPI.Services;
+using Keen.Core;
 using NestWebJob;
 using Newtonsoft.Json;
 using System;
@@ -39,7 +40,9 @@ namespace ElectricImpTemperatureAPI.Controllers
             {
                 model.Save();
 
-                CheckNest();
+                TemperatureReading nestTempReading = CheckNest();
+
+                SaveDataToKeenIO(nestTempReading, model);
             }
             catch
             {
@@ -49,7 +52,7 @@ namespace ElectricImpTemperatureAPI.Controllers
             return response;
         }
 
-        private void CheckNest()
+        private TemperatureReading CheckNest()
         {
             TemperatureReadingService tempReadingService = new TemperatureReadingService();
 
@@ -82,13 +85,24 @@ namespace ElectricImpTemperatureAPI.Controllers
                 else if (currentReadingInMaplesRoom.Temperature > TargetTemp + 0.2)
                 {
                     //turn Nest off if temp in Maples room is at acceptable temp
-                    nestTargetTemp = nestThermostat.ambient_temperature_c - 3.0;
+                    nestTargetTemp = nestThermostat.ambient_temperature_c - 0.5;
                     UpdateTargetTemperature(nestTargetTemp);
                     nestTempReading.AdditionalInformation = "Nest thermostat target temperature reduced to " + nestTargetTemp;
                 }
             }
 
             tempReadingService.Save(nestTempReading);
+
+            return nestTempReading;
+        }
+
+        private void SaveDataToKeenIO(TemperatureReading nestTemp, TemperatureReading bedroomTemp)
+        {
+            var prjSettings = new ProjectSettingsProvider("5492ab1396773d1189271310", writeKey: "9da5be2490ad287a8d2ba7c1d874107a6f17f7fcc11addcb5bc46ac29ad380b301d99ef5817e50cbbad82a6745a1db5dc7d90493c84e32c60d15119eb2efb96745625e0a5c583d4dda5eae342b94fe9f35efe39085634e47a6b6c7b894b07e516f258b650a9d453095a353b055a98ca9");
+            var keenClient = new KeenClient(prjSettings);
+            
+            keenClient.AddEvent("temperaturereadings", nestTemp);
+            keenClient.AddEvent("temperaturereadings", bedroomTemp);
         }
 
         private NestThermostat GetCurrentNestValues()

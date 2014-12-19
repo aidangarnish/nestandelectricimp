@@ -40,7 +40,15 @@ namespace ElectricImpTemperatureAPI.Controllers
             {
                 temperatureReading.Save();
 
-                TemperatureReading nestTempReading = CheckNest(temperatureReading);
+                NestThermostat nestThermostat = GetCurrentNestValues();
+
+                TemperatureReading nestTempReading = new TemperatureReading
+                {
+                    Temperature = nestThermostat.ambient_temperature_c,
+                    DeviceID = NestDeviceID
+                };
+               
+                CheckBedroomTemperature(temperatureReading, nestTempReading, nestThermostat);
 
                 SaveDataToKeenIO(nestTempReading, temperatureReading);
             }
@@ -51,24 +59,15 @@ namespace ElectricImpTemperatureAPI.Controllers
 
             return response;
         }
-
-        private TemperatureReading CheckNest(TemperatureReading bedroomReading)
+       
+        private void CheckBedroomTemperature(TemperatureReading bedroomReading, TemperatureReading nestTempReading, NestThermostat nestThermostat)
         {
             TemperatureReadingService tempReadingService = new TemperatureReadingService();
-
-            NestThermostat nestThermostat = GetCurrentNestValues();
-
-            //store nest value
-            TemperatureReading nestTempReading = new TemperatureReading
-            {
-                Temperature = nestThermostat.ambient_temperature_c,
-                DeviceID = NestDeviceID
-            };
 
             //check if it is night time and if the temp is below target
             //If it is then kick heating on using the NEST API
 
-            if ((DateTime.UtcNow.Hour >= 22 || DateTime.UtcNow.Hour <= 6))
+            if ((DateTime.UtcNow.Hour >= 22 || DateTime.UtcNow.Hour <= 6) && ConfigurationManager.AppSettings["Active"] == "true")
             {
                 double nestTargetTemp = 0.0;
 
@@ -88,8 +87,6 @@ namespace ElectricImpTemperatureAPI.Controllers
             }
 
             tempReadingService.Save(nestTempReading);
-
-            return nestTempReading;
         }
 
         private void SaveDataToKeenIO(TemperatureReading nestTemp, TemperatureReading bedroomTemp)

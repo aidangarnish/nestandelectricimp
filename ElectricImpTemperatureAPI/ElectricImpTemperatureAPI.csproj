@@ -98,8 +98,9 @@
     <Reference Include="PCLStorage.Abstractions">
       <HintPath>..\packages\PCLStorage.0.9.6\lib\net45\PCLStorage.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="RestackIO.Net">
-      <HintPath>..\packages\restackio.net.1.0.4\lib\RestackIO.Net.dll</HintPath>
+    <Reference Include="RestackIO.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\restackio.net.1.0.6\lib\RestackIO.Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

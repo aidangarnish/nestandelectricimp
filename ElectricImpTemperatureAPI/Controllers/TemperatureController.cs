@@ -3,8 +3,10 @@ using ElectricImpTemperatureAPI.Services;
 using Keen.Core;
 using NestWebJob;
 using Newtonsoft.Json;
+using RestackIO.Net;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Net;
@@ -51,6 +53,8 @@ namespace ElectricImpTemperatureAPI.Controllers
                 CheckBedroomTemperature(temperatureReading, nestTempReading, nestThermostat);
 
                 SaveDataToKeenIO(nestTempReading, temperatureReading);
+
+                SaveDataToRestackIO(temperatureReading);
             }
             catch
             {
@@ -96,6 +100,16 @@ namespace ElectricImpTemperatureAPI.Controllers
             
             keenClient.AddEvent("temperaturereadings", nestTemp);
             keenClient.AddEvent("temperaturereadings", bedroomTemp);
+        }
+
+        private void SaveDataToRestackIO(TemperatureReading nestTemp, TemperatureReading bedroomTemp)
+        {
+            Restack restackBedroomTemp = new Restack("36d74a01-a25b-11e4-903e-c1e2ccd2ffa5", "6wuixz6sgwjqbyb9hszuc8ol2445nrk9");
+            restackBedroomTemp.PostData("temperature", bedroomTemp.Temperature.ToString());
+
+            Restack restackNestTemp = new Restack("e815a1a1-a2f0-11e4-903e-c1e2ccd2ffa5", "l068azjih3mlhaor6mq7s4yqh9gm0a4i");
+            restackNestTemp.PostData("temperature", nestTemp.Temperature.ToString());
+           
         }
 
         private NestThermostat GetCurrentNestValues()

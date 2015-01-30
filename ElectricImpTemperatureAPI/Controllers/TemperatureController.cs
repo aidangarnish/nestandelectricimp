@@ -78,15 +78,21 @@ namespace ElectricImpTemperatureAPI.Controllers
                 if (bedroomReading.Temperature < TargetTemp - 0.2)
                 {
                     nestTargetTemp = nestThermostat.ambient_temperature_c + 1.0;
-                    UpdateTargetTemperature(nestTargetTemp);
-                    nestTempReading.AdditionalInformation = "Nest thermostat target temperature increased to " + nestTargetTemp;
+                    if (nestTargetTemp != nestThermostat.target_temperature_c)
+                    {
+                        UpdateTargetTemperature(nestTargetTemp);
+                        nestTempReading.AdditionalInformation = "Nest thermostat target temperature increased to " + nestTargetTemp;
+                    }
                 }
                 else if (bedroomReading.Temperature > TargetTemp + 0.2)
                 {
                     //turn Nest off if temp in Maples room is at acceptable temp
                     nestTargetTemp = nestThermostat.ambient_temperature_c - 0.5;
-                    UpdateTargetTemperature(nestTargetTemp);
-                    nestTempReading.AdditionalInformation = "Nest thermostat target temperature reduced to " + nestTargetTemp;
+                    if (nestTargetTemp != nestThermostat.target_temperature_c)
+                    {
+                        UpdateTargetTemperature(nestTargetTemp);
+                        nestTempReading.AdditionalInformation = "Nest thermostat target temperature reduced to " + nestTargetTemp;
+                    }
                 }
             }
 

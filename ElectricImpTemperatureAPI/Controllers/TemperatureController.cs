@@ -55,10 +55,13 @@ namespace ElectricImpTemperatureAPI.Controllers
 
                     CheckBedroomTemperature(temperatureReading, nestTempReading, nestThermostat);
 
-                    SaveDataToKeenIO(nestTempReading, temperatureReading);
+                    SaveDataToKeenIO(nestTempReading);
+                    
 
                     SaveDataToRestackIO(nestTempReading, temperatureReading);
                 }
+
+                SaveDataToKeenIO(temperatureReading);
             }
             catch
             {
@@ -103,13 +106,12 @@ namespace ElectricImpTemperatureAPI.Controllers
             tempReadingService.Save(nestTempReading);
         }
 
-        private void SaveDataToKeenIO(TemperatureReading nestTemp, TemperatureReading bedroomTemp)
+        private void SaveDataToKeenIO(TemperatureReading tempReading)
         {
             var prjSettings = new ProjectSettingsProvider("5492ab1396773d1189271310", writeKey: "9da5be2490ad287a8d2ba7c1d874107a6f17f7fcc11addcb5bc46ac29ad380b301d99ef5817e50cbbad82a6745a1db5dc7d90493c84e32c60d15119eb2efb96745625e0a5c583d4dda5eae342b94fe9f35efe39085634e47a6b6c7b894b07e516f258b650a9d453095a353b055a98ca9");
             var keenClient = new KeenClient(prjSettings);
             
-            keenClient.AddEvent("temperaturereadings", nestTemp);
-            keenClient.AddEvent("temperaturereadings", bedroomTemp);
+            keenClient.AddEvent("temperaturereadings", tempReading);
         }
 
         private void SaveDataToRestackIO(TemperatureReading nestTemp, TemperatureReading bedroomTemp)

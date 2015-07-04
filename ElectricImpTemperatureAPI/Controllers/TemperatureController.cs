@@ -57,7 +57,6 @@ namespace ElectricImpTemperatureAPI.Controllers
 
                     SaveDataToKeenIO(nestTempReading);
                     
-
                     SaveDataToRestackIO(nestTempReading, temperatureReading);
                 }
 

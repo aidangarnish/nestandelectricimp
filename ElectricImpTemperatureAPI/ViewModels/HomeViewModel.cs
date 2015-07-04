@@ -10,5 +10,6 @@ namespace ElectricImpTemperatureAPI.ViewModels
     {
         public TemperatureReading MapleTemperatureReading { get; set; }
         public TemperatureReading NestTemperatureReading { get; set; }
+        public TemperatureReading RaspberryPiTemperatureReading { get; set; }
     }
 }

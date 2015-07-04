@@ -43,19 +43,22 @@ namespace ElectricImpTemperatureAPI.Controllers
             {
                 temperatureReading.Save();
 
-                NestThermostat nestThermostat = GetCurrentNestValues();
-
-                TemperatureReading nestTempReading = new TemperatureReading
+                if (temperatureReading.DeviceID != "RaspberryPi")
                 {
-                    Temperature = nestThermostat.ambient_temperature_c,
-                    DeviceID = NestDeviceID
-                };
-               
-                CheckBedroomTemperature(temperatureReading, nestTempReading, nestThermostat);
+                    NestThermostat nestThermostat = GetCurrentNestValues();
 
-                SaveDataToKeenIO(nestTempReading, temperatureReading);
+                    TemperatureReading nestTempReading = new TemperatureReading
+                    {
+                        Temperature = nestThermostat.ambient_temperature_c,
+                        DeviceID = NestDeviceID
+                    };
 
-                SaveDataToRestackIO(nestTempReading, temperatureReading);
+                    CheckBedroomTemperature(temperatureReading, nestTempReading, nestThermostat);
+
+                    SaveDataToKeenIO(nestTempReading, temperatureReading);
+
+                    SaveDataToRestackIO(nestTempReading, temperatureReading);
+                }
             }
             catch
             {

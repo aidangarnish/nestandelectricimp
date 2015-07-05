@@ -16,22 +16,60 @@
                 </tr>
             </thead>
             <tbody>
+
                 <tr>
                     <td>Maple's</td>
-                    <td>@Model.MapleTemperatureReading.Temperature&#176C</td>
-                    <td>@Model.MapleTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                    @if (Model.MapleTemperatureReading != null)
+                    {
+                        <td>@Model.MapleTemperatureReading.Temperature&#176C</td>
+                        <td>@Model.MapleTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                    }
+                    else
+                    {
+                        <td>No record available</td>
+                        <td></td>
+                    }
+                    
                 </tr>
+
                 <tr>
                     <td>Snug</td>
-                    <td>@Model.NestTemperatureReading.Temperature&#176C</td>
-                    <td>@Model.NestTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                    @if (Model.NestTemperatureReading != null)
+                    {
+                        <td>@Model.NestTemperatureReading.Temperature&#176C</td>
+                        <td>@Model.NestTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                    }
+                    else
+                    {
+                        <td>No record available</td>
+                        <td></td>
+                    }
+                    
                 </tr>
+
                 <tr>
                     <td>Raspberry Pi</td>
-                    <td>@Model.RaspberryPiTemperatureReading.Temperature&#176C</td>
-                    <td>@Model.RaspberryPiTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                    @if (Model.RaspberryPiTemperatureReading != null)
+                    {
+                        <td>@Model.RaspberryPiTemperatureReading.Temperature&#176C</td>
+                        <td>@Model.RaspberryPiTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                    }
+                    else
+                    {
+                        <td>No record available</td>
+                        <td></td>
+                    }
+                    
                 </tr>
+
             </tbody>
+
+
+
+
+
+
+
         </table>
     </div>
 </div>

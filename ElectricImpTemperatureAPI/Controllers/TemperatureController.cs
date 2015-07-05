@@ -134,14 +134,21 @@ namespace ElectricImpTemperatureAPI.Controllers
         }
         private void UpdateTargetTemperature(double targetTemp)
         {
-            WebClient client = new WebClient();
-            string url = NestThermostatUrl + NestThermostatID + "?auth=" + NestAuthToken;
+            try
+            {
+                WebClient client = new WebClient();
+                string url = NestThermostatUrl + NestThermostatID + "?auth=" + NestAuthToken;
 
-            string postData = "{\"target_temperature_c\": " + targetTemp + "}";
-            byte[] postArray = Encoding.ASCII.GetBytes(postData);
-            client.Headers.Add("Content-Type", "application/json");
+                string postData = "{\"target_temperature_c\": " + targetTemp + "}";
+                byte[] postArray = Encoding.ASCII.GetBytes(postData);
+                client.Headers.Add("Content-Type", "application/json");
 
-            byte[] responseBytes = client.UploadData(url, "PUT", postArray);
+                byte[] responseBytes = client.UploadData(url, "PUT", postArray);
+            }
+            catch(HttpException ex)
+            {
+                int httpCode = ex.GetHttpCode();
+            }
         }
     }
 }

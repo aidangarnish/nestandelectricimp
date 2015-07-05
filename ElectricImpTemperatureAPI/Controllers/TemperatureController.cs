@@ -53,7 +53,10 @@ namespace ElectricImpTemperatureAPI.Controllers
                         DeviceID = NestDeviceID
                     };
 
-                    CheckBedroomTemperature(temperatureReading, nestTempReading, nestThermostat);
+                    if (nestThermostat.hvac_mode != "off")
+                    {
+                        CheckBedroomTemperature(temperatureReading, nestTempReading, nestThermostat);
+                    }
 
                     SaveDataToKeenIO(nestTempReading);
                     

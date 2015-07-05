@@ -16,6 +16,7 @@ namespace ElectricImpTemperatureAPI.Controllers
         private string MapleRoomDeviceID;
         private string NestDeviceID;
         private string RaspberryPiId;
+        private DateTime UkDateTimeNow;
        
 
 
@@ -25,7 +26,9 @@ namespace ElectricImpTemperatureAPI.Controllers
             MapleRoomDeviceID = ConfigurationManager.AppSettings["MaplesRoomDeviceID"];
             NestDeviceID = ConfigurationManager.AppSettings["NestDeviceID"];
             RaspberryPiId = ConfigurationManager.AppSettings["RaspberryPi"];
-
+            
+            TimeZoneInfo ukTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+            UkDateTimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, ukTimeZone);
         }
         // GET: Chart
         public JsonResult Last3Hours()
@@ -37,7 +40,9 @@ namespace ElectricImpTemperatureAPI.Controllers
 
         public JsonResult Today()
         {
-            int minutesToday = DateTime.UtcNow.Hour * 60 + DateTime.UtcNow.Minute;
+            
+
+            int minutesToday = UkDateTimeNow.Hour * 60 + UkDateTimeNow.Minute;
             int remainder = minutesToday % 15;
             int minutesToChart = minutesToday - remainder;
 
@@ -124,7 +129,7 @@ namespace ElectricImpTemperatureAPI.Controllers
                 pointHighlightStroke = "rgba(151,187,205,1)"
             };
 
-            List<TemperatureReading> maplesReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), MapleRoomDeviceID).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
+            List<TemperatureReading> maplesReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(UkDateTimeNow.ToString("dd-MM-yyyy"), MapleRoomDeviceID).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
 
             maplesRoomDataset.data = BuildDataSet(labelDateTimes, maplesReadings);
 
@@ -140,7 +145,7 @@ namespace ElectricImpTemperatureAPI.Controllers
                 pointHighlightStroke = "rgba(220,220,220,1)"
             };
 
-            List<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), NestDeviceID).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
+            List<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(UkDateTimeNow.ToString("dd-MM-yyyy"), NestDeviceID).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
 
             nestDataset.data = BuildDataSet(labelDateTimes, nestReadings);
 
@@ -156,7 +161,7 @@ namespace ElectricImpTemperatureAPI.Controllers
                 pointHighlightStroke = "rgba(120,120,120,1)"
             };
 
-            List<TemperatureReading> piReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), RaspberryPiId).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
+            List<TemperatureReading> piReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(UkDateTimeNow.ToString("dd-MM-yyyy"), RaspberryPiId).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
 
             piDataset.data = BuildDataSet(labelDateTimes, piReadings);
 
@@ -201,10 +206,9 @@ namespace ElectricImpTemperatureAPI.Controllers
 
         private List<string> GetLabels(int minutes, int interval, List<DateTime> labelDateTimes)
         {
-            DateTime currentDateTime = DateTime.UtcNow;
-            int currentMinute = currentDateTime.Minute;
+            int currentMinute = UkDateTimeNow.Minute;
             int currentMinuteRemainder = currentMinute % interval;
-            DateTime lastLabelDateTime = currentDateTime.AddMinutes(-currentMinuteRemainder);
+            DateTime lastLabelDateTime = UkDateTimeNow.AddMinutes(-currentMinuteRemainder);
 
             List<string> labels = new List<string>();
             for (int i = minutes/interval; i >= 0; i--)

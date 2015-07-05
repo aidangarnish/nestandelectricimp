@@ -129,7 +129,7 @@ namespace ElectricImpTemperatureAPI.Controllers
                 pointHighlightStroke = "rgba(151,187,205,1)"
             };
 
-            List<TemperatureReading> maplesReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(UkDateTimeNow.ToString("dd-MM-yyyy"), MapleRoomDeviceID).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
+            List<TemperatureReading> maplesReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(UkDateTimeNow.ToString("dd-MM-yyyy"), MapleRoomDeviceID).Where(r => r.UkTimeStamp >= firstLabelDateTime).ToList();
 
             maplesRoomDataset.data = BuildDataSet(labelDateTimes, maplesReadings);
 
@@ -145,7 +145,7 @@ namespace ElectricImpTemperatureAPI.Controllers
                 pointHighlightStroke = "rgba(220,220,220,1)"
             };
 
-            List<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(UkDateTimeNow.ToString("dd-MM-yyyy"), NestDeviceID).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
+            List<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(UkDateTimeNow.ToString("dd-MM-yyyy"), NestDeviceID).Where(r => r.UkTimeStamp >= firstLabelDateTime).ToList();
 
             nestDataset.data = BuildDataSet(labelDateTimes, nestReadings);
 
@@ -161,7 +161,7 @@ namespace ElectricImpTemperatureAPI.Controllers
                 pointHighlightStroke = "rgba(120,120,120,1)"
             };
 
-            List<TemperatureReading> piReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(UkDateTimeNow.ToString("dd-MM-yyyy"), RaspberryPiId).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
+            List<TemperatureReading> piReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(UkDateTimeNow.ToString("dd-MM-yyyy"), RaspberryPiId).Where(r => r.UkTimeStamp >= firstLabelDateTime).ToList();
 
             piDataset.data = BuildDataSet(labelDateTimes, piReadings);
 

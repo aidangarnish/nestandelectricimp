@@ -185,7 +185,7 @@ namespace ElectricImpTemperatureAPI.Controllers
                 TemperatureReading closestReading = null;
                 foreach (TemperatureReading reading in temperatureReadings)
                 {
-                    double diffInSeconds = Math.Abs((labelDateTime - reading.Timestamp.ToLocalTime()).TotalSeconds);
+                    double diffInSeconds = Math.Abs((labelDateTime - reading.UkTimeStamp).TotalSeconds);
                     if (diffInSeconds < minDiff)
                     {
                         closestReading = reading;

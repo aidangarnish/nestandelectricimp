@@ -15,6 +15,7 @@ namespace ElectricImpTemperatureAPI.Controllers
         private TemperatureReadingService temperatureReadingService;
         private string MapleRoomDeviceID;
         private string NestDeviceID;
+        private string RaspberryPiId;
        
 
 
@@ -23,7 +24,7 @@ namespace ElectricImpTemperatureAPI.Controllers
             temperatureReadingService = new TemperatureReadingService();
             MapleRoomDeviceID = ConfigurationManager.AppSettings["MaplesRoomDeviceID"];
             NestDeviceID = ConfigurationManager.AppSettings["NestDeviceID"];
-           
+            RaspberryPiId = ConfigurationManager.AppSettings["RaspberryPi"];
 
         }
         // GET: Chart
@@ -111,6 +112,7 @@ namespace ElectricImpTemperatureAPI.Controllers
 
             DateTime firstLabelDateTime = labelDateTimes.OrderBy(t => t.TimeOfDay).FirstOrDefault();
             
+            //Maple's room dataset - Electric Imp
             Dataset maplesRoomDataset = new Dataset
             {
                 label = "Maple's room",
@@ -126,6 +128,7 @@ namespace ElectricImpTemperatureAPI.Controllers
 
             maplesRoomDataset.data = BuildDataSet(labelDateTimes, maplesReadings);
 
+            //Nest dataset
             Dataset nestDataset = new Dataset
             {
                 label = "Nest - snug",
@@ -137,16 +140,30 @@ namespace ElectricImpTemperatureAPI.Controllers
                 pointHighlightStroke = "rgba(220,220,220,1)"
             };
 
-            
-
             List<TemperatureReading> nestReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), NestDeviceID).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
 
             nestDataset.data = BuildDataSet(labelDateTimes, nestReadings);
 
+            //Sun room - Raspberry Pi dataset
+            Dataset piDataset = new Dataset
+            {
+                label = "Raspberry Pi - sun room",
+                fillColor = "rgba(120,120,120,0.2)",
+                strokeColor = "rgba(120,120,120,1)",
+                pointColor = "rgba(120,120,120,1)",
+                pointStrokeColor = "#fff",
+                pointHighlightFill = "#fff",
+                pointHighlightStroke = "rgba(120,120,120,1)"
+            };
+
+            List<TemperatureReading> piReadings = temperatureReadingService.TempByPartitionKeyAndDeviceIdentifier(DateTime.UtcNow.ToString("dd-MM-yyyy"), RaspberryPiId).Where(r => r.Timestamp >= firstLabelDateTime).ToList();
+
+            piDataset.data = BuildDataSet(labelDateTimes, piReadings);
+
             Chart chart = new Chart
             {
                 labels = labels,
-                datasets = new List<Dataset> { nestDataset, maplesRoomDataset }
+                datasets = new List<Dataset> { nestDataset, maplesRoomDataset, piDataset }
             };
 
             return chart;
@@ -163,7 +180,7 @@ namespace ElectricImpTemperatureAPI.Controllers
                 TemperatureReading closestReading = null;
                 foreach (TemperatureReading reading in temperatureReadings)
                 {
-                    double diffInSeconds = Math.Abs((labelDateTime - reading.Timestamp).TotalSeconds);
+                    double diffInSeconds = Math.Abs((labelDateTime - reading.Timestamp.ToLocalTime()).TotalSeconds);
                     if (diffInSeconds < minDiff)
                     {
                         closestReading = reading;

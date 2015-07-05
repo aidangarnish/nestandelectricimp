@@ -23,6 +23,15 @@ namespace ElectricImpTemperatureAPI.Models
         public double Temperature { get; set; }
         public string AdditionalInformation { get; set; }
 
+        public DateTime UkTimeStamp 
+        {
+            get
+            {
+                TimeZoneInfo ukTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+                DateTime ukDateTime = TimeZoneInfo.ConvertTimeFromUtc(this.Timestamp.DateTime, ukTimeZone);
+                return ukDateTime;
+            }
+        }
         public void Save()
         {
             temperatureReadingService.Save(this);

@@ -18,11 +18,11 @@
             <tbody>
 
                 <tr>
-                    <td>Maple's</td>
+                    <td>Maple's Bedroom</td>
                     @if (Model.MapleTemperatureReading != null)
                     {
                         <td>@Model.MapleTemperatureReading.Temperature&#176C</td>
-                        <td>@Model.MapleTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                        <td>@Model.MapleTemperatureReading.UkTimeStamp.ToString("HH:mm")</td>
                     }
                     else
                     {
@@ -33,11 +33,11 @@
                 </tr>
 
                 <tr>
-                    <td>Snug</td>
+                    <td>Kitchen</td>
                     @if (Model.NestTemperatureReading != null)
                     {
                         <td>@Model.NestTemperatureReading.Temperature&#176C</td>
-                        <td>@Model.NestTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                        <td>@Model.NestTemperatureReading.UkTimeStamp.ToString("HH:mm")</td>
                     }
                     else
                     {
@@ -48,11 +48,11 @@
                 </tr>
 
                 <tr>
-                    <td>Raspberry Pi</td>
+                    <td>Sun Room</td>
                     @if (Model.RaspberryPiTemperatureReading != null)
                     {
                         <td>@Model.RaspberryPiTemperatureReading.Temperature&#176C</td>
-                        <td>@Model.RaspberryPiTemperatureReading.Timestamp.ToString("HH:mm")</td>
+                        <td>@Model.RaspberryPiTemperatureReading.UkTimeStamp.ToString("HH:mm")</td>
                     }
                     else
                     {

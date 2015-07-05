@@ -58,6 +58,8 @@ namespace ElectricImpTemperatureAPI.Controllers
                         CheckBedroomTemperature(temperatureReading, nestTempReading, nestThermostat);
                     }
 
+                    nestTempReading.Save();
+
                     SaveDataToKeenIO(nestTempReading);
                     
                     SaveDataToRestackIO(nestTempReading, temperatureReading);
@@ -104,8 +106,6 @@ namespace ElectricImpTemperatureAPI.Controllers
                     }
                 }
             }
-
-            tempReadingService.Save(nestTempReading);
         }
 
         private void SaveDataToKeenIO(TemperatureReading tempReading)

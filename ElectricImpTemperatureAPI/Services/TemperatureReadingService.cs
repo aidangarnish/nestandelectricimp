@@ -14,7 +14,6 @@ namespace ElectricImpTemperatureAPI.Services
     {
         private string ATSConnectionString;
         private string TableName;
-        private string LastTracksTableName;
         private CloudStorageAccount cloudStorageAccount;
      
         public TemperatureReadingService()
@@ -66,15 +65,51 @@ namespace ElectricImpTemperatureAPI.Services
 
         public void Save(TemperatureReading tempReading)
         {
-            tempReading.PartitionKey = DateTime.Today.ToString("dd-MM-yyyy");
+            Save(tempReading, DateTime.Today.ToString("dd-MM-yyyy"));
+
+            SaveRecordReadings(tempReading);  
+        }
+
+        private void Save(TemperatureReading tempReading, string partitionKey)
+        {
+            tempReading.PartitionKey = partitionKey;
 
             CloudStorageAccount account = CloudStorageAccount.Parse(ATSConnectionString);
             CloudTableClient tableClient = account.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference(TableName);
             table.CreateIfNotExists();
 
-            TableOperation insertOperation = TableOperation.Insert(tempReading);
+            TableOperation insertOperation = TableOperation.InsertOrMerge(tempReading);
             table.Execute(insertOperation);
+        }
+
+        private void SaveRecordReadings(TemperatureReading tempReading)
+        {
+            //partition keys for highest readings
+            //highest ever for device = "[deviceId]-highest"
+            //lowest ever for device = "[deviceId]-lowest"
+            //highest for device this month = "[deviceId]-[MM-yyyy]-highest"
+            //lowest for device this month = "[deviceId]-[MM-yyyy]-lowest"
+            //highest for device today = "[deviceId]-[dd-MM-yyyy]-highest"
+            //lowest for device today = "[deviceId]-[dd-MM-yyyy]-lowest"
+
+            //get/set highest ever reading for device
+            string highestReadingPartitionKey = tempReading.DeviceID + "-highest";
+            var highestTempForDevice = TempByPartitionKey(highestReadingPartitionKey).FirstOrDefault();
+            if(highestTempForDevice == null || highestTempForDevice.Temperature < tempReading.Temperature)
+            {
+                tempReading.RowKey = highestTempForDevice != null ? highestTempForDevice.RowKey : tempReading.RowKey;
+                Save(tempReading, highestReadingPartitionKey);
+            }
+
+            //get/set lowest ever reading for device
+            string lowestReadingPartitionKey = tempReading.DeviceID + "-lowest";
+            var lowestTempForDevice = TempByPartitionKey(lowestReadingPartitionKey).FirstOrDefault();
+            if (highestTempForDevice == null || lowestTempForDevice.Temperature > tempReading.Temperature)
+            {
+                tempReading.RowKey = lowestTempForDevice != null ? lowestTempForDevice.RowKey : tempReading.RowKey;
+                Save(tempReading, lowestReadingPartitionKey);
+            }
         }
     }
 }

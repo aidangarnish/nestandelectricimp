@@ -6,16 +6,12 @@ using Newtonsoft.Json;
 using RestackIO.Net;
 using RestackIO.Net.Models;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
 
 namespace ElectricImpTemperatureAPI.Controllers
 {
@@ -26,6 +22,8 @@ namespace ElectricImpTemperatureAPI.Controllers
         private string NestAuthToken;
         private double TargetTemp;
         private string NestDeviceID;
+        private string KeenIOMasterKey;
+        private string KeenIOWriteKey;
 
         public TemperatureController()
         {
@@ -34,6 +32,8 @@ namespace ElectricImpTemperatureAPI.Controllers
             NestAuthToken = ConfigurationManager.AppSettings["NestAuthToken"];
             TargetTemp = Convert.ToDouble(ConfigurationManager.AppSettings["TargetTemp"]);
             NestDeviceID = ConfigurationManager.AppSettings["NestDeviceID"];
+            KeenIOMasterKey = ConfigurationManager.AppSettings["KeenIOMasterKey"];
+            KeenIOWriteKey = ConfigurationManager.AppSettings["KeenIOWriteKey"];
         }
         public HttpResponseMessage Post([FromBody]TemperatureReading temperatureReading)
         {
@@ -110,7 +110,7 @@ namespace ElectricImpTemperatureAPI.Controllers
 
         private void SaveDataToKeenIO(TemperatureReading tempReading)
         {
-            var prjSettings = new ProjectSettingsProvider("5492ab1396773d1189271310", writeKey: "9da5be2490ad287a8d2ba7c1d874107a6f17f7fcc11addcb5bc46ac29ad380b301d99ef5817e50cbbad82a6745a1db5dc7d90493c84e32c60d15119eb2efb96745625e0a5c583d4dda5eae342b94fe9f35efe39085634e47a6b6c7b894b07e516f258b650a9d453095a353b055a98ca9");
+            var prjSettings = new ProjectSettingsProvider(KeenIOMasterKey, writeKey: KeenIOWriteKey);
             var keenClient = new KeenClient(prjSettings);
             
             keenClient.AddEvent("temperaturereadings", tempReading);

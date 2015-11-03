@@ -27,7 +27,13 @@ namespace ElectricImpTemperatureAPI.Controllers
             {
                 MapleTemperatureReading = tempReadings.Where(t => t.DeviceID == ConfigurationManager.AppSettings["MaplesRoomDeviceID"]).OrderByDescending(t => t.Timestamp).FirstOrDefault(),
                 NestTemperatureReading = tempReadings.Where(t => t.DeviceID == ConfigurationManager.AppSettings["NestDeviceID"]).OrderByDescending(t => t.Timestamp).FirstOrDefault(),
-                RaspberryPiTemperatureReading = tempReadings.Where(t => t.DeviceID == ConfigurationManager.AppSettings["RaspberryPi"]).OrderByDescending(t => t.Timestamp).FirstOrDefault()
+                RaspberryPiTemperatureReading = tempReadings.Where(t => t.DeviceID == ConfigurationManager.AppSettings["RaspberryPi"]).OrderByDescending(t => t.Timestamp).FirstOrDefault(),
+                HighestMapleTemperatureReading = temperatureReadingService.TempByPartitionKey(ConfigurationManager.AppSettings["MaplesRoomDeviceID"] + "-highest").FirstOrDefault(),
+                LowestMapleTemperatureReading = temperatureReadingService.TempByPartitionKey(ConfigurationManager.AppSettings["MaplesRoomDeviceID"] + "-lowest").FirstOrDefault(),
+                HighestNestTemperatureReading = temperatureReadingService.TempByPartitionKey(ConfigurationManager.AppSettings["NestDeviceID"] + "-highest").FirstOrDefault(),
+                LowestNestTemperatureReading = temperatureReadingService.TempByPartitionKey(ConfigurationManager.AppSettings["NestDeviceID"] + "-lowest").FirstOrDefault(),
+                HighestRaspberryPiTemperatureReading = temperatureReadingService.TempByPartitionKey(ConfigurationManager.AppSettings["RaspberryPi"] + "-highest").FirstOrDefault(),
+                LowestRaspberryPiTemperatureReading = temperatureReadingService.TempByPartitionKey(ConfigurationManager.AppSettings["RaspberryPi"] + "-lowest").FirstOrDefault(),
             };
             return View(model);
         }

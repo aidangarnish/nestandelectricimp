@@ -2,7 +2,7 @@
 
 <div class="jumbotron">
     <h1>@DateTime.UtcNow.ToString("dd MMM yyyy")</h1>
-   
+
 </div>
 <div class="row">
     <div class="col-md-12">
@@ -29,7 +29,7 @@
                         <td>No record available</td>
                         <td></td>
                     }
-                    
+
                 </tr>
 
                 <tr>
@@ -44,7 +44,7 @@
                         <td>No record available</td>
                         <td></td>
                     }
-                    
+
                 </tr>
 
                 <tr>
@@ -59,7 +59,7 @@
                         <td>No record available</td>
                         <td></td>
                     }
-                    
+
                 </tr>
 
             </tbody>
@@ -88,48 +88,83 @@
     </div>
 </div>
 
-@section Scripts {
-  <script>
-      Chart.defaults.global.responsive = true;
-      var options = {
-          bezierCurve: true,
-          legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
-      };
+<h2>Record Temperatures</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Room</th>
+            <th>Lowest Temperature</th>
+            <th>Date</th>
+            <th>Highest Temperature</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Maple's Bedroom</td>
+            <td>@Model.LowestMapleTemperatureReading.Temperature</td>
+            <td>@Model.LowestMapleTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+            <td>@Model.HighestMapleTemperatureReading.Temperature</td>
+            <td>@Model.HighestMapleTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+        </tr>
+        <tr>
+            <td>Kitchen</td>
+            <td>@Model.LowestNestTemperatureReading.Temperature</td>
+            <td>@Model.LowestNestTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+            <td>@Model.HighestNestTemperatureReading.Temperature</td>
+            <td>@Model.HighestNestTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+        </tr>
+        <tr>
+            <td>Sunroom</td>
+            <td>@Model.LowestRaspberryPiTemperatureReading.Temperature</td>
+            <td>@Model.LowestRaspberryPiTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+            <td>@Model.HighestRaspberryPiTemperatureReading.Temperature</td>
+            <td>@Model.HighestRaspberryPiTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+        </tr>
+    </tbody>
+</table>
+        @section Scripts {
+            <script>
+                Chart.defaults.global.responsive = true;
+                var options = {
+                    bezierCurve: true,
+                    legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+                };
 
-      $.ajax({
-          type: "GET",
-          cache: false,
-          url: "/chart/last3hours",
-          success: function (data) {
-              // Get the context of the canvas element we want to select
-              var ctx = document.getElementById("3HourChart").getContext("2d");
-              var myLineChart = new Chart(ctx).Line(data, options);
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-              console.log(textStatus, errorThrown);
-          },
-          complete: function () {
-              $('#last3hoursspinner').hide();
-          }  
-      });
+                $.ajax({
+                    type: "GET",
+                    cache: false,
+                    url: "/chart/last3hours",
+                    success: function (data) {
+                        // Get the context of the canvas element we want to select
+                        var ctx = document.getElementById("3HourChart").getContext("2d");
+                        var myLineChart = new Chart(ctx).Line(data, options);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    },
+                    complete: function () {
+                        $('#last3hoursspinner').hide();
+                    }
+                });
 
-      $.ajax({
-          type: "GET",
-          cache: false,
-          url: "/chart/today",
-          success: function (data) {
-              // Get the context of the canvas element we want to select
-              var ctx = document.getElementById("todayChart").getContext("2d");
-              var myLineChart = new Chart(ctx).Line(data, options);
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-              console.log(textStatus, errorThrown);
-          },
-          complete: function () {
-              $('#todayspinner').hide();
-          }
-      });
+                $.ajax({
+                    type: "GET",
+                    cache: false,
+                    url: "/chart/today",
+                    success: function (data) {
+                        // Get the context of the canvas element we want to select
+                        var ctx = document.getElementById("todayChart").getContext("2d");
+                        var myLineChart = new Chart(ctx).Line(data, options);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    },
+                    complete: function () {
+                        $('#todayspinner').hide();
+                    }
+                });
 
-</script>
-}
+            </script>
+        }
 

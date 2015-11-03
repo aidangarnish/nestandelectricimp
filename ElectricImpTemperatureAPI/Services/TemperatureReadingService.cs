@@ -110,6 +110,25 @@ namespace ElectricImpTemperatureAPI.Services
                 tempReading.RowKey = lowestTempForDevice != null ? lowestTempForDevice.RowKey : tempReading.RowKey;
                 Save(tempReading, lowestReadingPartitionKey);
             }
+
+
+            //get/set highest reading for device this month
+            string highestReadingThisMonthPartitionKey = tempReading.DeviceID + DateTime.UtcNow.Month + "-" + DateTime.UtcNow.Year + "-highest";
+            var highestTempForDeviceThisMonth = TempByPartitionKey(highestReadingThisMonthPartitionKey).FirstOrDefault();
+            if (highestTempForDeviceThisMonth == null || highestTempForDeviceThisMonth.Temperature < tempReading.Temperature)
+            {
+                tempReading.RowKey = highestTempForDeviceThisMonth != null ? highestTempForDeviceThisMonth.RowKey : tempReading.RowKey;
+                Save(tempReading, highestReadingThisMonthPartitionKey);
+            }
+
+            //get/set lowest reading for device this month
+            string lowestReadingThisMonthPartitionKey = tempReading.DeviceID + DateTime.UtcNow.Month + "-" + DateTime.UtcNow.Year + "-lowest";
+            var lowestTempForDeviceThisMonth = TempByPartitionKey(lowestReadingThisMonthPartitionKey).FirstOrDefault();
+            if (lowestTempForDeviceThisMonth == null || lowestTempForDeviceThisMonth.Temperature > tempReading.Temperature)
+            {
+                tempReading.RowKey = lowestTempForDeviceThisMonth != null ? lowestTempForDeviceThisMonth.RowKey : tempReading.RowKey;
+                Save(tempReading, lowestReadingThisMonthPartitionKey);
+            }
         }
     }
 }

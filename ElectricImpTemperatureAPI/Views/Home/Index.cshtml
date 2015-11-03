@@ -88,41 +88,6 @@
     </div>
 </div>
 
-<h2>Record Temperatures</h2>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Room</th>
-            <th>Lowest Temperature</th>
-            <th>Date</th>
-            <th>Highest Temperature</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Maple's Bedroom</td>
-            <td>@Model.LowestMapleTemperatureReading.Temperature</td>
-            <td>@Model.LowestMapleTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
-            <td>@Model.HighestMapleTemperatureReading.Temperature</td>
-            <td>@Model.HighestMapleTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
-        </tr>
-        <tr>
-            <td>Kitchen</td>
-            <td>@Model.LowestNestTemperatureReading.Temperature</td>
-            <td>@Model.LowestNestTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
-            <td>@Model.HighestNestTemperatureReading.Temperature</td>
-            <td>@Model.HighestNestTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
-        </tr>
-        <tr>
-            <td>Sunroom</td>
-            <td>@Model.LowestRaspberryPiTemperatureReading.Temperature</td>
-            <td>@Model.LowestRaspberryPiTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
-            <td>@Model.HighestRaspberryPiTemperatureReading.Temperature</td>
-            <td>@Model.HighestRaspberryPiTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
-        </tr>
-    </tbody>
-</table>
 
 
 <h2>Today's Record Temperatures</h2>
@@ -131,32 +96,24 @@
         <tr>
             <th>Room</th>
             <th>Lowest Temperature</th>
-            <th>Date</th>
             <th>Highest Temperature</th>
-            <th>Date</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>Maple's Bedroom</td>
             <td>@Model.LowestMapleTemperatureReadingToday.Temperature</td>
-            <td>@Model.LowestMapleTemperatureReadingToday.UkTimeStamp.ToString("dd-MM-yyyy")</td>
             <td>@Model.HighestMapleTemperatureReadingToday.Temperature</td>
-            <td>@Model.HighestMapleTemperatureReadingToday.UkTimeStamp.ToString("dd-MM-yyyy")</td>
         </tr>
         <tr>
             <td>Kitchen</td>
             <td>@Model.LowestNestTemperatureReadingToday.Temperature</td>
-            <td>@Model.LowestNestTemperatureReadingToday.UkTimeStamp.ToString("dd-MM-yyyy")</td>
             <td>@Model.HighestNestTemperatureReadingToday.Temperature</td>
-            <td>@Model.HighestNestTemperatureReadingToday.UkTimeStamp.ToString("dd-MM-yyyy")</td>
         </tr>
         <tr>
             <td>Sunroom</td>
             <td>@Model.LowestRaspberryPiTemperatureReadingToday.Temperature</td>
-            <td>@Model.LowestRaspberryPiTemperatureReadingToday.UkTimeStamp.ToString("dd-MM-yyyy")</td>
             <td>@Model.HighestRaspberryPiTemperatureReadingToday.Temperature</td>
-            <td>@Model.HighestRaspberryPiTemperatureReadingToday.UkTimeStamp.ToString("dd-MM-yyyy")</td>
         </tr>
     </tbody>
 </table>
@@ -196,6 +153,43 @@
         </tr>
     </tbody>
 </table>
+
+<h2>All Time Record Temperatures</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Room</th>
+            <th>Lowest Temperature</th>
+            <th>Date</th>
+            <th>Highest Temperature</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Maple's Bedroom</td>
+            <td>@Model.LowestMapleTemperatureReading.Temperature</td>
+            <td>@Model.LowestMapleTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+            <td>@Model.HighestMapleTemperatureReading.Temperature</td>
+            <td>@Model.HighestMapleTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+        </tr>
+        <tr>
+            <td>Kitchen</td>
+            <td>@Model.LowestNestTemperatureReading.Temperature</td>
+            <td>@Model.LowestNestTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+            <td>@Model.HighestNestTemperatureReading.Temperature</td>
+            <td>@Model.HighestNestTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+        </tr>
+        <tr>
+            <td>Sunroom</td>
+            <td>@Model.LowestRaspberryPiTemperatureReading.Temperature</td>
+            <td>@Model.LowestRaspberryPiTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+            <td>@Model.HighestRaspberryPiTemperatureReading.Temperature</td>
+            <td>@Model.HighestRaspberryPiTemperatureReading.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+        </tr>
+    </tbody>
+</table>
+
 
         @section Scripts {
             <script>

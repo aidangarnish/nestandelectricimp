@@ -161,6 +161,42 @@
     </tbody>
 </table>
 
+<h2>This Months Record Temperatures</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Room</th>
+            <th>Lowest Temperature</th>
+            <th>Date</th>
+            <th>Highest Temperature</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Maple's Bedroom</td>
+            <td>@Model.LowestMapleTemperatureReadingThisMonth.Temperature</td>
+            <td>@Model.LowestMapleTemperatureReadingThisMonth.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+            <td>@Model.HighestMapleTemperatureReadingThisMonth.Temperature</td>
+            <td>@Model.HighestMapleTemperatureReadingThisMonth.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+        </tr>
+        <tr>
+            <td>Kitchen</td>
+            <td>@Model.LowestNestTemperatureReadingThisMonth.Temperature</td>
+            <td>@Model.LowestNestTemperatureReadingThisMonth.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+            <td>@Model.HighestNestTemperatureReadingThisMonth.Temperature</td>
+            <td>@Model.HighestNestTemperatureReadingThisMonth.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+        </tr>
+        <tr>
+            <td>Sunroom</td>
+            <td>@Model.LowestRaspberryPiTemperatureReadingThisMonth.Temperature</td>
+            <td>@Model.LowestRaspberryPiTemperatureReadingThisMonth.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+            <td>@Model.HighestRaspberryPiTemperatureReadingThisMonth.Temperature</td>
+            <td>@Model.HighestRaspberryPiTemperatureReadingThisMonth.UkTimeStamp.ToString("dd-MM-yyyy")</td>
+        </tr>
+    </tbody>
+</table>
+
         @section Scripts {
             <script>
                 Chart.defaults.global.responsive = true;

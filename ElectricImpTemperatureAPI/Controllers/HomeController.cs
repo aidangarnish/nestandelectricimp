@@ -29,6 +29,9 @@ namespace ElectricImpTemperatureAPI.Controllers
             IEnumerable<TemperatureReading> highestTempReadingsToday = temperatureReadingService.TempByPartitionKey(DateTime.UtcNow.ToString("dd-MM-yyyy") + "-highest");
             IEnumerable<TemperatureReading> lowestTempReadingsToday = temperatureReadingService.TempByPartitionKey(DateTime.UtcNow.ToString("dd-MM-yyyy") + "-lowest");
 
+            IEnumerable<TemperatureReading> highestTempReadingsThisMonth = temperatureReadingService.TempByPartitionKey(DateTime.UtcNow.ToString("MM-yyyy") + "-highest");
+            IEnumerable<TemperatureReading> lowestTempReadingsThisMonth = temperatureReadingService.TempByPartitionKey(DateTime.UtcNow.ToString("MM-yyyy") + "-lowest");
+
             HomeViewModel model = new HomeViewModel
             {
                 MapleTemperatureReading = tempReadings.Where(t => t.DeviceID == ConfigurationManager.AppSettings["MaplesRoomDeviceID"]).OrderByDescending(t => t.Timestamp).FirstOrDefault(),
@@ -48,6 +51,13 @@ namespace ElectricImpTemperatureAPI.Controllers
                 LowestNestTemperatureReadingToday = lowestTempReadingsToday.Where(d => d.DeviceID == ConfigurationManager.AppSettings["NestDeviceID"]).FirstOrDefault(),
                 HighestRaspberryPiTemperatureReadingToday = highestTempReadingsToday.Where(d => d.DeviceID == ConfigurationManager.AppSettings["RaspberryPi"]).FirstOrDefault(),
                 LowestRaspberryPiTemperatureReadingToday = lowestTempReadingsToday.Where(d => d.DeviceID == ConfigurationManager.AppSettings["RaspberryPi"]).FirstOrDefault(),
+
+                HighestMapleTemperatureReadingThisMonth = highestTempReadingsThisMonth.Where(d => d.DeviceID == ConfigurationManager.AppSettings["MaplesRoomDeviceID"]).FirstOrDefault(),
+                LowestMapleTemperatureReadingThisMonth = lowestTempReadingsThisMonth.Where(d => d.DeviceID == ConfigurationManager.AppSettings["MaplesRoomDeviceID"]).FirstOrDefault(),
+                HighestNestTemperatureReadingThisMonth = highestTempReadingsThisMonth.Where(d => d.DeviceID == ConfigurationManager.AppSettings["NestDeviceID"]).FirstOrDefault(),
+                LowestNestTemperatureReadingThisMonth = lowestTempReadingsThisMonth.Where(d => d.DeviceID == ConfigurationManager.AppSettings["NestDeviceID"]).FirstOrDefault(),
+                HighestRaspberryPiTemperatureReadingThisMonth = highestTempReadingsThisMonth.Where(d => d.DeviceID == ConfigurationManager.AppSettings["RaspberryPi"]).FirstOrDefault(),
+                LowestRaspberryPiTemperatureReadingThisMonth = lowestTempReadingsThisMonth.Where(d => d.DeviceID == ConfigurationManager.AppSettings["RaspberryPi"]).FirstOrDefault(),
 
             };
             return View(model);

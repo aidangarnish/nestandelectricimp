@@ -102,18 +102,61 @@
     <tbody>
         <tr>
             <td>Maple's Bedroom</td>
-            <td>@Model.LowestMapleTemperatureReadingToday.Temperature&#176C</td>
-            <td>@Model.HighestMapleTemperatureReadingToday.Temperature&#176C</td>
+                @if (Model.LowestMapleTemperatureReadingToday != null)
+                {
+                    <td>@Model.LowestMapleTemperatureReadingToday.Temperature&#176C</td>
+                }
+                else
+                {   
+                    <td>No record available</td>
+                }
+                @if (Model.HighestMapleTemperatureReadingToday != null)
+                {
+                    <td>@Model.HighestMapleTemperatureReadingToday.Temperature&#176C</td>
+                }
+                else
+                {
+                    <td>No record available</td>
+                }
         </tr>
         <tr>
             <td>Kitchen</td>
-            <td>@Model.LowestNestTemperatureReadingToday.Temperature&#176C</td>
-            <td>@Model.HighestNestTemperatureReadingToday.Temperature&#176C</td>
+            @if (Model.LowestNestTemperatureReadingToday != null)
+            {
+                <td>@Model.LowestNestTemperatureReadingToday.Temperature&#176C</td>
+            }
+            else
+            {
+                <td>No record available</td>
+            }
+            @if (Model.HighestNestTemperatureReadingToday != null)
+            {
+                <td>@Model.HighestNestTemperatureReadingToday.Temperature&#176C</td>
+            }
+            else
+            {
+                <td>No record available</td>
+            }
+          
         </tr>
         <tr>
             <td>Sun room</td>
-            <td>@Model.LowestRaspberryPiTemperatureReadingToday.Temperature&#176C</td>
-            <td>@Model.HighestRaspberryPiTemperatureReadingToday.Temperature&#176C</td>
+            @if (Model.LowestRaspberryPiTemperatureReadingToday != null)
+            {
+                <td>@Model.LowestRaspberryPiTemperatureReadingToday.Temperature&#176C</td>
+            }
+            else
+            {
+                <td>No record available</td>
+            }
+            @if (Model.HighestRaspberryPiTemperatureReadingToday != null)
+            {
+                <td>@Model.HighestRaspberryPiTemperatureReadingToday.Temperature&#176C</td>
+            }
+            else
+            {
+                <td>No record available</td>
+            }
         </tr>
     </tbody>
 </table>

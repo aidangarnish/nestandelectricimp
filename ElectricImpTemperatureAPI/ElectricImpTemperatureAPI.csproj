@@ -21,6 +21,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <ApplicationInsightsResourceId>/subscriptions/3a8df3c1-765c-4784-b125-e1ffb71b1469/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/ElectricImpTemperatureAPI</ApplicationInsightsResourceId>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -220,11 +221,16 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KitchenStatusController.cs" />
+    <Compile Include="Controllers\MaplesRoomStatusController.cs" />
+    <Compile Include="Controllers\StatusController.cs" />
+    <Compile Include="Controllers\SunRoomStatusController.cs" />
     <Compile Include="Controllers\TemperatureController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Chart.cs" />
+    <Compile Include="Models\DTOs\LatestTemperatures.cs" />
     <Compile Include="Models\NestThermostat.cs" />
     <Compile Include="Models\RickshawDataSeries.cs" />
     <Compile Include="Models\TemperatureReading.cs" />
@@ -314,7 +320,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>44214</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

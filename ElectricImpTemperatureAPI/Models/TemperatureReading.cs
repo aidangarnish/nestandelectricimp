@@ -32,6 +32,14 @@ namespace ElectricImpTemperatureAPI.Models
                 return ukDateTime;
             }
         }
+
+        public string UKTimeStampToDisplayString
+        {
+            get
+            {
+                return UkTimeStamp.ToString("dd/MM/yyyy HH:mm");
+            }
+        }
         public void Save()
         {
             temperatureReadingService.Save(this);

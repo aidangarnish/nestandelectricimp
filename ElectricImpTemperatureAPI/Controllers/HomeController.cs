@@ -68,5 +68,18 @@ namespace ElectricImpTemperatureAPI.Controllers
             return View();
         }
 
+        [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
+        public JsonResult Status()
+        {
+            TemperatureReadingService temperatureReadingService = new TemperatureReadingService();
+            IEnumerable<TemperatureReading> tempReadings = temperatureReadingService.TempByPartitionKey(DateTime.Today.ToString("dd-MM-yyyy"));
+
+
+            var latestSunRoomTempReading = tempReadings.Where(t => t.DeviceID == ConfigurationManager.AppSettings["RaspberryPi"]).OrderByDescending(t => t.Timestamp).FirstOrDefault();
+            latestSunRoomTempReading.DeviceID = "Sun Room";
+
+            return Json(latestSunRoomTempReading, JsonRequestBehavior.AllowGet);
+        }
     }
 }

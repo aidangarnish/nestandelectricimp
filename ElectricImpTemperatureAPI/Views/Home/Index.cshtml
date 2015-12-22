@@ -189,10 +189,22 @@
         </tr>
         <tr>
             <td>Sun room</td>
+            @if (Model.LowestRaspberryPiTemperatureReadingThisMonth != null)
+            {
             <td>@Model.LowestRaspberryPiTemperatureReadingThisMonth.Temperature&#176C</td>
             <td>@Model.LowestRaspberryPiTemperatureReadingThisMonth.UkTimeStamp.ToString("dd/MM/yyyy")</td>
+            }
+            else
+            { <td></td><td></td>}
+            @if (Model.HighestRaspberryPiTemperatureReadingThisMonth != null)
+            {
             <td>@Model.HighestRaspberryPiTemperatureReadingThisMonth.Temperature&#176C</td>
             <td>@Model.HighestRaspberryPiTemperatureReadingThisMonth.UkTimeStamp.ToString("dd/MM/yyyy")</td>
+            }
+            else
+            {
+                <td></td><td></td>
+            }
         </tr>
     </tbody>
 </table>
